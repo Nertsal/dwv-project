@@ -1,0 +1,4 @@
+__pycache__
+.scrapy
+venv
+.env
