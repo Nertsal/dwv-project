@@ -6,7 +6,9 @@
 import scrapy
 
 
-class ScrappingItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class LanguageItem(scrapy.Item):
+    name = scrapy.Field()
+    paradigms = scrapy.Field()
+    appeared = scrapy.Field()
+    influenced_by = scrapy.Field()
+    influenced = scrapy.Field()
