@@ -51,4 +51,4 @@ def extract_text(response) -> str:
     result = ""
     for s in response.xpath(".//text()").extract():
         result += s
-    return result
+    return result.strip()
