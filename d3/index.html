@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Some plots</title>
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+
+<div class="main">
+  <h1 class='title'>Analyzing games listed on Wikipedia</h1>
+
+  <div style="display:flex">
+    <div>
+      <div class="container" id="graph-container">
+        <div class="chart-wrapper">
+          <div class='chart' id='force_directed'></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.plot.ly/plotly-2.9.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="./data.js"></script>
+<script src="./script.js"></script>
+
+</body>
+</html>
