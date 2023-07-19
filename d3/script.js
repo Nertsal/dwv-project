@@ -254,7 +254,7 @@ function make_side_bar(genre) {
   // Specify the chart’s dimensions.
   const width = 500;
   const height = 600;
-  const marginTop = 20;
+  const marginTop = 40;
   const marginRight = 10;
   const marginBottom = 160;
   const marginLeft = 80;
@@ -309,7 +309,23 @@ function make_side_bar(genre) {
     .call(yAxis)
     .call(g => g.select(".domain").remove());
 
-  // d3.axis.tickFormat(d3.format("d"));
+  // Y-axis label
+  svg.append("text")
+    .attr("x", -height / 2)
+    .attr("y", 15)
+    .attr("dy", "1em")
+    .attr("text-anchor", "middle")
+    .attr("transform", "rotate(-90)")
+    .style("font-size", "16px")
+    .text(`Number of games published`);
+
+  // Title
+  svg.append("text")
+    .attr("x", (width / 2))
+    .attr("y", 25)
+    .attr("text-anchor", "middle")
+    .style("font-size", "16px")
+    .text(`Developers of the '${genre}' genre`);
 
   $(side_bar).html(svg.node());
 }
