@@ -126,10 +126,10 @@ function process_fdg(data) {
     var bestCount = -1;
     linksMap.forEach(l => {
       if (l.connections > bestCount) {
-        if (l.source.id == d.id) {
+        if (l.source.id == d.id && l.target.id != d.id) {
           bestCount = l.connections;
           bestConnection = l.target.id;
-        } else if (l.target.id == d.id) {
+        } else if (l.target.id == d.id && l.source.id != d.id) {
           bestCount = l.connections;
           bestConnection = l.source.id;
         }
@@ -199,7 +199,7 @@ function process_fdg(data) {
   }
 
   function handleZoom(event) {
-    d3.selectAll("g")
+    svg.selectAll("g")
       .attr("transform", event.transform)
   }
   const zoom = d3.zoom().on("zoom", handleZoom);
