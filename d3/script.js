@@ -6,7 +6,6 @@ function process_fdg(data) {
   data.forEach(d => {
     for (var i = 0; i < d.genres.length; i++) {
       const g1 = d.genres[i];
-      console.log(genres[g1])
       if (!nodesMap.get(g1)) {
         nodesMap.set(g1, {
           vx: Math.random(),
@@ -116,6 +115,13 @@ function process_fdg(data) {
     event.subject.fx = null;
     event.subject.fy = null;
   }
+
+  function handleZoom(event) {
+    d3.selectAll("g")
+      .attr("transform", event.transform)
+  }
+  const zoom = d3.zoom().on("zoom", handleZoom);
+  svg.call(zoom);
 
   // When this cell is re-run, stop the previous simulation. (This doesn’t
   // really matter since the target alpha is zero and the simulation will
