@@ -144,19 +144,31 @@ function process_fdg(data) {
     make_side_bar(d.id);
 
     // Highlight neighbour nodes
-    node.style("opacity", n => {
-      if (neighboring(d, n)) {
-        return 1.0;
-      } else {
-        return 0.2;
-      }
-    });
+    node
+      .style("opacity", n => {
+        if (neighboring(d, n)) {
+          return 1.0;
+        } else {
+          return 0.2;
+        }
+      })
+      .attr("stroke", n => {
+        if (bestConnection == n.id) {
+          return "#d33";
+        } else {
+          return "#fff";
+        }
+      });
 
     // Higlight links
     link
       .attr("stroke", l => {
         if (l.source.id === d.id || l.target.id === d.id) {
-          return "#ddd";
+          if (l.source.id == bestConnection || l.target.id == bestConnection) {
+            return "#d33";
+          } else {
+            return "#ddd";
+          }
         } else {
           return "#333";
         }
@@ -171,7 +183,9 @@ function process_fdg(data) {
     tooltip.hideTooltip();
 
     // Remove highlights
-    node.style("opacity", 1.0);
+    node
+      .style("opacity", 1.0)
+      .attr("stroke", "#fff");
     link.attr("stroke", "#555");
   }
 
