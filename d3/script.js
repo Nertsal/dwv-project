@@ -6,8 +6,13 @@ function process_fdg(data) {
   data.forEach(d => {
     for (var i = 0; i < d.genres.length; i++) {
       const g1 = d.genres[i];
+      console.log(genres[g1])
       if (!nodesMap.get(g1)) {
-        nodesMap.set(g1, { vx: Math.random(), vy: Math.random() });
+        nodesMap.set(g1, {
+          vx: Math.random(),
+          vy: Math.random(),
+          radius: genres[g1],
+        });
       }
       for (var j = i; j < d.genres.length; j++) {
         const g2 = d.genres[j];
@@ -24,8 +29,7 @@ function process_fdg(data) {
   nodesMap.forEach((v, genre) => {
     nodes.push({
       id: genre,
-      // value: v.value,
-      // group: v.value.category,
+      r: v.radius,
       vx: v.vx,
       vy: v.vy,
     });
@@ -67,7 +71,7 @@ function process_fdg(data) {
     .selectAll("circle")
     .data(nodes)
     .join("circle")
-      .attr("r", 5)
+      .attr("r", d => Math.sqrt(d.r) + 2)
       .attr("fill", d => color(d.group));
 
   node.append("title")

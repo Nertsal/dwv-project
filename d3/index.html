@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" >
 <head>
-  <meta charset="UTF-8">
-  <title>Some plots</title>
-  <link rel="stylesheet" href="./style.css">
-
+    <meta charset="UTF-8">
+    <title>Some plots</title>
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
 <div class="main">
-  <h1 class='title'>Analyzing games listed on Wikipedia</h1>
+    <h1 class="title">
+        Visualization of the list of all games from <a href="https://en.wikipedia.org/wiki/List_of_PC_games_(A)">Wikipedia</a>
+    </h1>
 
-  <div style="display:flex">
-    <div>
-      <div class="container" id="graph-container">
-        <div class="chart-wrapper">
-          <div class='chart' id='force_directed'></div>
+    <div style="display:flex">
+        <div>
+        <div class="container" id="graph-container">
+            <div class="chart-wrapper">
+            <div class='chart' id='force_directed'></div>
+            </div>
         </div>
-      </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <script src="https://cdn.plot.ly/plotly-2.9.0.min.js"></script>
