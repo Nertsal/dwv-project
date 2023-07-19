@@ -1,0 +1,11 @@
+html,
+body {
+    height: 100%;
+    font-family: Georgia, serif;
+    background: #fff1e5;
+    font-size: 1.2em;
+}
+
+.title {
+    text-align: center;
+}

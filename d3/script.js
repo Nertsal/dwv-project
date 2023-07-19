@@ -35,7 +35,7 @@ function process_fdg(data) {
   });
 
   // Specify the dimensions of the chart.
-  const width = 928;
+  const width = 600;
   const height = 600;
 
   // Specify the color scale.
@@ -53,7 +53,7 @@ function process_fdg(data) {
       .attr("width", width)
       .attr("height", height)
       .attr("viewBox", [-width / 2, -height / 2, width, height])
-      .attr("style", "max-width: 100%; height: auto;");
+      .attr("style", "width: 100%; height: 100%; background-color: #222;");
 
   // Add a line for each link, and a circle for each node.
   const link = svg.append("g")
