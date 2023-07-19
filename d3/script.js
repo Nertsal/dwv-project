@@ -42,7 +42,6 @@ function process_fdg(data) {
 
   var links = []
   linksMap.forEach((v, key) => {
-    v.value = 1;
     links.push(v);
   });
 
@@ -76,7 +75,7 @@ function process_fdg(data) {
     .selectAll("line")
     .data(links)
     .join("line")
-      .attr("stroke-width", d => Math.sqrt(d.connections));
+      .attr("stroke-width", d => Math.pow(d.connections, 0.7));
 
   const node = svg.append("g")
       .attr("stroke", "#fff")
