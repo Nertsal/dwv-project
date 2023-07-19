@@ -3,6 +3,7 @@ process_fdg(game_data);
 function process_fdg(data) {
   var nodesMap = new Map();
   var links = []
+  var indexed_links = {}
   data.forEach(d => {
     for (var i = 0; i < d.genres.length; i++) {
       const g1 = d.genres[i];
@@ -20,6 +21,7 @@ function process_fdg(data) {
           target: g2,
           value: 1,
         });
+        indexed_links[`${g1},${g2}`] = true;
       }
     }
   });
@@ -100,9 +102,22 @@ function process_fdg(data) {
         .attr("cy", d => d.y);
   });
 
+  function neighboring(d, n) {
+    return d.id === n.id || indexed_links[`${d.id},${n.id}`] || indexed_links[`${n.id},${d.id}`];
+  }
+
   function mouse_over(event, d) {
     content = "<h2>" + d.id + "</h2>"
     tooltip.showTooltip(content, event);
+
+    // Highlight neighbour nodes
+    node.style("opacity", n => {
+      if (neighboring(d, n)) {
+        return 1.0;
+      } else {
+        return 0.2;
+      }
+    });
   }
 
   function mouse_move(event) {
@@ -111,11 +126,13 @@ function process_fdg(data) {
 
   function mouse_out(d) {
     tooltip.hideTooltip();
+
+    // Remove highlights
+    node.style("opacity", 1.0);
   }
 
   // Reheat the simulation when drag starts, and fix the subject position.
   function dragstarted(event) {
-    tooltip.hideTooltip();
     if (!event.active) simulation.alphaTarget(0.3).restart();
     event.subject.fx = event.subject.x;
     event.subject.fy = event.subject.y;
@@ -123,6 +140,7 @@ function process_fdg(data) {
 
   // Update the subject (dragged node) position during drag.
   function dragged(event) {
+    tooltip.hideTooltip();
     event.subject.fx = event.x;
     event.subject.fy = event.y;
   }
