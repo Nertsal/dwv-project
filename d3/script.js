@@ -41,6 +41,8 @@ function process_fdg(data) {
   // Specify the color scale.
   const color = d3.scaleOrdinal(d3.schemeCategory10);
 
+  const tooltip = Tooltip("tooltip", 230);
+
   // Create a simulation with several forces.
   const simulation = d3.forceSimulation(nodes)
       .force("link", d3.forceLink(links).id(d => d.id))
@@ -73,14 +75,17 @@ function process_fdg(data) {
       .attr("r", d => Math.sqrt(d.r) + 2)
       .attr("fill", d => color(d.group));
 
-  node.append("title")
-      .text(d => d.id);
+  // node.append("title")
+  //     .text(d => d.id);
 
   // Add a drag behavior.
   node.call(d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended));
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended))
+      .on("mouseover", mouse_over)
+      .on("mousemove", mouse_move)
+      .on("mouseout", mouse_out);
   
   // Set the position attributes of links and nodes each time the simulation ticks.
   simulation.on("tick", () => {
@@ -95,8 +100,22 @@ function process_fdg(data) {
         .attr("cy", d => d.y);
   });
 
+  function mouse_over(event, d) {
+    content = "<h2>" + d.id + "</h2>"
+    tooltip.showTooltip(content, event);
+  }
+
+  function mouse_move(event) {
+    tooltip.updatePosition(event)
+  }
+
+  function mouse_out(d) {
+    tooltip.hideTooltip();
+  }
+
   // Reheat the simulation when drag starts, and fix the subject position.
   function dragstarted(event) {
+    tooltip.hideTooltip();
     if (!event.active) simulation.alphaTarget(0.3).restart();
     event.subject.fx = event.subject.x;
     event.subject.fy = event.subject.y;

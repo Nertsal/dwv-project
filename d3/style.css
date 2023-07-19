@@ -19,3 +19,19 @@ body {
   border-radius: 2em;
   overflow: hidden;
 }
+
+.tooltip {
+  background: #000d;
+  border-radius: 1em;
+  border: 0.2em solid #ddd;
+  color: #ddd;
+  font-size: 0.6em;
+  text-align: center;
+  left: 1em;
+  opacity: 1;
+  padding: 0.3em;
+  position: absolute;
+  top: 2em;
+  /* width: 300px; */
+  z-index: 120;
+}
