@@ -118,6 +118,16 @@ function process_fdg(data) {
         return 0.2;
       }
     });
+
+    // Higlight links
+    link
+      .attr("stroke", l => {
+        if (l.source.id === d.id || l.target.id === d.id) {
+          return "#ddd";
+        } else {
+          return "#333";
+        }
+      });
   }
 
   function mouse_move(event) {
@@ -129,10 +139,12 @@ function process_fdg(data) {
 
     // Remove highlights
     node.style("opacity", 1.0);
+    link.attr("stroke", "#555");
   }
 
   // Reheat the simulation when drag starts, and fix the subject position.
   function dragstarted(event) {
+    tooltip.hideTooltip();
     if (!event.active) simulation.alphaTarget(0.3).restart();
     event.subject.fx = event.subject.x;
     event.subject.fy = event.subject.y;
