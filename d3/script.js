@@ -265,8 +265,6 @@ function make_side_bar(genre) {
     .range([marginLeft, width - marginRight])
     .padding(0.1);
 
-  const xAxis = d3.axisBottom(x).tickSizeOuter(0);
-
   // Create the vertical scale.
   const y = d3.scaleLinear()
     .domain([0, d3.max(data, d => d.count)]).nice()
@@ -292,6 +290,7 @@ function make_side_bar(genre) {
     .attr("width", x.bandwidth());
 
   // Append the axes.
+  const xAxis = d3.axisBottom(x).tickSizeOuter(0);
   svg.append("g")
     .attr("class", "x-axis")
     .attr("transform", `translate(0,${height - marginBottom})`)
@@ -302,11 +301,15 @@ function make_side_bar(genre) {
     .attr("dy", ".15em")
     .attr("transform", "rotate(-60)");
 
+  const maxY = data[0].count;
+  const yAxis = d3.axisLeft(y).ticks(maxY).tickFormat(d3.format("d"));
   svg.append("g")
     .attr("class", "y-axis")
     .attr("transform", `translate(${marginLeft},0)`)
-    .call(d3.axisLeft(y))
+    .call(yAxis)
     .call(g => g.select(".domain").remove());
+
+  // d3.axis.tickFormat(d3.format("d"));
 
   $(side_bar).html(svg.node());
 }
