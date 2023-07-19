@@ -119,6 +119,7 @@ function process_fdg(data) {
   function mouse_over(event, d) {
     content = "<h2>" + d.id + "</h2>"
     tooltip.showTooltip(content, event);
+    make_side_bar(d.id);
 
     // Highlight neighbour nodes
     node.style("opacity", n => {
@@ -219,8 +220,8 @@ function make_side_bar(genre) {
   const height = 600;
   const marginTop = 20;
   const marginRight = 10;
-  const marginBottom = 140;
-  const marginLeft = 60;
+  const marginBottom = 160;
+  const marginLeft = 80;
 
   // Create the horizontal scale and its axis generator.
   const x = d3.scaleBand()
@@ -271,5 +272,5 @@ function make_side_bar(genre) {
     .call(d3.axisLeft(y))
     .call(g => g.select(".domain").remove());
 
-  side_bar.append(svg.node());
+  $(side_bar).html(svg.node());
 }
