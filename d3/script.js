@@ -11,7 +11,7 @@ function process_fdg(data) {
         nodesMap.set(g1, {
           vx: Math.random(),
           vy: Math.random(),
-          radius: genres[g1],
+          count: genres[g1],
         });
       }
       for (var j = i; j < d.genres.length; j++) {
@@ -35,7 +35,7 @@ function process_fdg(data) {
   nodesMap.forEach((v, genre) => {
     nodes.push({
       id: genre,
-      r: v.radius,
+      count: v.count,
       vx: v.vx,
       vy: v.vy,
     });
@@ -84,7 +84,7 @@ function process_fdg(data) {
     .selectAll("circle")
     .data(nodes)
     .join("circle")
-      .attr("r", d => Math.sqrt(d.r) + 2)
+      .attr("r", d => Math.sqrt(d.count) + 2)
       .attr("fill", d => color(d.group));
 
   // node.append("title")
@@ -117,7 +117,29 @@ function process_fdg(data) {
   }
 
   function mouse_over(event, d) {
-    content = "<h2>" + d.id + "</h2>"
+    // Tooltip
+    content = `<h2>${d.id}</h2>`;
+    const games = d.count == 1 ? "game" : "games";
+    content += `<p>${d.count} ${games}</p>`;
+
+    var bestConnection = null;
+    var bestCount = -1;
+    linksMap.forEach(l => {
+      if (l.connections > bestCount) {
+        if (l.source.id == d.id) {
+          bestCount = l.connections;
+          bestConnection = l.target.id;
+        } else if (l.target.id == d.id) {
+          bestCount = l.connections;
+          bestConnection = l.source.id;
+        }
+      }
+    });
+
+    if (bestConnection) {
+      content += `<p>Most used with '${bestConnection}'</p>`;
+    }
+
     tooltip.showTooltip(content, event);
     make_side_bar(d.id);
 
