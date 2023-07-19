@@ -1,4 +1,5 @@
 process_fdg(game_data);
+make_side_bar("rpg");
 
 function process_fdg(data) {
   var nodesMap = new Map();
@@ -40,7 +41,7 @@ function process_fdg(data) {
     });
   });
 
-  var links = []
+  var links = [];
   linksMap.forEach((v, key) => {
     links.push(v);
   });
@@ -187,4 +188,88 @@ function process_fdg(data) {
   // invalidation.then(() => simulation.stop());
 
   force_directed.append(svg.node());
+}
+
+function make_side_bar(genre) {
+  var dataMap = new Map();
+  for (var i = 0; i < game_data.length; i++) {
+    var item = game_data[i];
+    if (item.genres.includes(genre)) {
+      var v = dataMap.get(item.developer);
+      if (!v) {
+        dataMap.set(item.developer, {
+          developer: item.developer,
+          count: 1,
+        });
+      } else {
+        v.count += 1;
+      }
+    }
+  }
+
+  var data = [];
+  dataMap.forEach((v, key) => {
+    data.push(v);
+  });
+  data.sort((a, b) => b.count - a.count);
+  data = data.slice(0, 10);
+
+  // Specify the chart’s dimensions.
+  const width = 500;
+  const height = 600;
+  const marginTop = 20;
+  const marginRight = 10;
+  const marginBottom = 140;
+  const marginLeft = 60;
+
+  // Create the horizontal scale and its axis generator.
+  const x = d3.scaleBand()
+    .domain(d3.sort(data, d => -d.count).map(d => d.developer))
+    .range([marginLeft, width - marginRight])
+    .padding(0.1);
+
+  const xAxis = d3.axisBottom(x).tickSizeOuter(0);
+
+  // Create the vertical scale.
+  const y = d3.scaleLinear()
+    .domain([0, d3.max(data, d => d.count)]).nice()
+    .range([height - marginBottom, marginTop]);
+
+  // Create the SVG container and call the zoom behavior.
+  const svg = d3.create("svg")
+    .attr("viewBox", [0, 0, width, height])
+    .attr("width", width)
+    .attr("height", height)
+    .attr("style", "width: 100%; height: auto;");
+
+  // Append the bars.
+  svg.append("g")
+    .attr("class", "bars")
+    .attr("fill", "steelblue")
+    .selectAll("rect")
+    .data(data)
+    .join("rect")
+    .attr("x", d => x(d.developer))
+    .attr("y", d => y(d.count))
+    .attr("height", d => y(0) - y(d.count))
+    .attr("width", x.bandwidth());
+
+  // Append the axes.
+  svg.append("g")
+    .attr("class", "x-axis")
+    .attr("transform", `translate(0,${height - marginBottom})`)
+    .call(xAxis)
+    .selectAll("text")
+    .style("text-anchor", "end")
+    .attr("dx", "-.8em")
+    .attr("dy", ".15em")
+    .attr("transform", "rotate(-60)");
+
+  svg.append("g")
+    .attr("class", "y-axis")
+    .attr("transform", `translate(${marginLeft},0)`)
+    .call(d3.axisLeft(y))
+    .call(g => g.select(".domain").remove());
+
+  side_bar.append(svg.node());
 }
