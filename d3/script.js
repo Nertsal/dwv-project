@@ -2,8 +2,7 @@ process_fdg(game_data);
 
 function process_fdg(data) {
   var nodesMap = new Map();
-  var links = []
-  var indexed_links = {}
+  var linksMap = new Map();
   data.forEach(d => {
     for (var i = 0; i < d.genres.length; i++) {
       const g1 = d.genres[i];
@@ -16,12 +15,17 @@ function process_fdg(data) {
       }
       for (var j = i; j < d.genres.length; j++) {
         const g2 = d.genres[j];
-        links.push({
-          source: g1,
-          target: g2,
-          value: 1,
-        });
-        indexed_links[`${g1},${g2}`] = true;
+        const key = `${g1},${g2}`;
+        var v = linksMap.get(key);
+        if (!v) {
+          linksMap.set(key, {
+            source: g1,
+            target: g2,
+            connections: 1,
+          });
+        } else {
+          v.connections += 1;
+        }
       }
     }
   });
@@ -34,6 +38,12 @@ function process_fdg(data) {
       vx: v.vx,
       vy: v.vy,
     });
+  });
+
+  var links = []
+  linksMap.forEach((v, key) => {
+    v.value = 1;
+    links.push(v);
   });
 
   // Specify the dimensions of the chart.
@@ -66,7 +76,7 @@ function process_fdg(data) {
     .selectAll("line")
     .data(links)
     .join("line")
-      .attr("stroke-width", d => Math.sqrt(d.value));
+      .attr("stroke-width", d => Math.sqrt(d.connections));
 
   const node = svg.append("g")
       .attr("stroke", "#fff")
@@ -103,7 +113,7 @@ function process_fdg(data) {
   });
 
   function neighboring(d, n) {
-    return d.id === n.id || indexed_links[`${d.id},${n.id}`] || indexed_links[`${n.id},${d.id}`];
+    return d.id === n.id || linksMap.get(`${d.id},${n.id}`) || linksMap.get(`${n.id},${d.id}`);
   }
 
   function mouse_over(event, d) {
